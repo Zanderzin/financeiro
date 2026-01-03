@@ -67,7 +67,9 @@ def eh_nome_pessoa(texto):
         'posto', 'shopping', 'center', 'magazine', 'supermercado',
         'delivery', 'express', 'online', 'store', 'shop', 'company',
         'distribuidora', 'ifood', 'uber', 'rappi', 'ticket', 'estacio',
-        'cinema', 'teatro', 'hospital', 'clinica', 'farmacia', 'drogaria'
+        'cinema', 'teatro', 'hospital', 'clinica', 'farmacia', 'drogaria',
+        'petronorte', 'taguatinga', 'mc donald', 'mcdonald', 'creperia',
+        'pica-pau', 'magalupay', 'gmcm', 'combustivel', 'brasilia'
     ]
     
     for palavra in palavras_empresa:
@@ -84,32 +86,19 @@ def eh_nome_pessoa(texto):
             # Primeiros nomes comuns
             'jose', 'maria', 'joao', 'ana', 'antonio', 'francisco', 'carlos',
             'paulo', 'pedro', 'lucas', 'marcos', 'gabriel', 'rafael', 'bruno',
-            'thiago', 'felipe', 'gustavo', 'ricardo', 'roberto', 'mariana',
-            'juliana', 'adriana', 'fernanda', 'camila', 'beatriz', 'leticia',
-            'sophia', 'isabela', 'larissa', 'natasha', 'victor', 'matheus',
-            'daniel', 'eduardo', 'leonardo', 'henrique', 'gabriela', 'carolina',
-            'bianca', 'aline', 'carla', 'daniela', 'eliana', 'renata', 'simone',
             'fernando', 'rodrigo', 'patricia', 'sandra', 'juliana', 'fernanda',
             'camila', 'beatriz', 'luciana', 'mariana', 'amanda', 'julia',
             'bruna', 'larissa', 'natalia', 'vanessa', 'marcelo', 'eduardo',
             'gustavo', 'felipe', 'diego', 'vitor', 'matheus', 'thiago',
             'ricardo', 'roberto', 'sergio', 'luis', 'luciene', 'bernardo',
             'alexander', 'alessandra', 'giovanna', 'paula', 'jonatas',
-            'alex', 'teixeira', 'macedo', 'francisca', 'helena', 'isabela',
-            'laura', 'sophia', 'yara', 'aline', 'carla', 'daniela', 'eliana',
-            'renata', 'simone', 'tatiana', 'adriana', 'claudia', 'cristina',
-            'daniele', 'elisabeth', 'flavia', 'gabriela', 'isabel', 'karen',
-            'leticia', 'marina', 'natasha', 'priscila', 'raquel', 'sandra',
-            'thais', 'valeria', 'vivian', 'wallace', 'willian',
-            'yuri', 'zeca',
+            'alex', 'teixeira', 'macedo', 'francisca',
             # Sobrenomes comuns
             'silva', 'santos', 'oliveira', 'souza', 'costa', 'ferreira', 
             'rodrigues', 'almeida', 'nascimento', 'lima', 'araujo', 'ribeiro', 
             'carvalho', 'martins', 'dias', 'lopes', 'gomes', 'mendes', 'barros', 
             'cardoso', 'rocha', 'miranda', 'duarte', 'monteiro', 'freitas', 
             'barbosa', 'campos', 'aquino', 'morais', 'brandao', 'macena'
-            'freire', 'pires', 'siqueira', 'assis', 'cunha', 'vieira',
-            'tavares', 'pontes', 'sampaio', 'serra', 'farias', 'moura'
         ]
         
         # Verifica se alguma palavra do texto está na lista de nomes
@@ -140,26 +129,16 @@ def categorizar_transacao(descricao):
     
     descricao_lower = descricao.lower()
     
-    # PRIMEIRO: Verificar se é transferência/PIX (antes de outras categorias)
-    palavras_transferencia = ['pix', 'ted', 'doc', 'transferencia', 'transferência', 'recebido', 'enviado']
-    for palavra in palavras_transferencia:
-        if palavra in descricao_lower:
-            return 'Transferências'
-    
-    # Verificar se parece ser nome de pessoa (PIX para pessoa física)
-    if eh_nome_pessoa(descricao):
-        return 'Transferências'
-    
     # Dicionário de categorias com palavras-chave
     categorias = {
         'Alimentação': [
             'ifood', 'quentinhas', 'sabor', 'macarons', 'nino', 'loucos por burger', 
             'biscoitos', 'rappi', 'bolos', 'uber eats', 'restaurante', 'lanchonete',
-            'padaria', 'dog', 'mcdonalds', 'sucoetal', 'bacio', 'bauducco', 
-            'lancheteria', 'benedito', 'veloce', 'creperia', 'marmitexleo', 
+            'padaria', 'dog', 'mcdonalds', 'mc donald', 'sucoetal', 'bacio', 'bauducco', 
+            'lancheteria', 'benedito', 'veloce', 'creperia', 'pica-pau', 'marmitexleo', 
             'mercado', 'taguatinga', 'supermercado', 'açougue', 'hortifruti',
             'pizza', 'burger', 'distribuidora', 'fini', 'casa do pao', 'pao', 
-            'big box', 'burguer', 'imperio dos paes', 'mc donald', 'bobs', 
+            'big box', 'burguer', 'imperio dos paes', 'bobs', 
             'subway', 'giraffas', 'outback', 'dominos', 'torta', 'dona', 
             'abbraccio', 'coco bambu', 'spoleto', 'habibs', 'leonardobianoda',
             'american cookies', 'sorbe', 'cafe', 'bakery', 'pao de acucar', 
@@ -170,7 +149,7 @@ def categorizar_transacao(descricao):
             'uber', 'iguatemi', 'car', 'combustiveis', 'estacionament', 'lyft', 
             'cabify', '99', 'taxi', 'combustivel', 'gasolina', 'posto', 'park', 
             'parkshopping', 'petronorte', 'shell', 'boulevard', 'ipiranga', 
-            'br petroleo', 'petrobras', 'estacionamento', 'valet', 'onibus', 
+            'br petroleo', 'petrobras', 'gmcm', 'estacionamento', 'valet', 'onibus', 
             'metro', 'metrô', 'transporte', 'pedágio', 'pedagio', 'viacard', 
             'carlos ieje de sena', 'sem parar'
         ],
@@ -180,7 +159,7 @@ def categorizar_transacao(descricao):
             'caesb', 'correios', 'celpe', 'cemig', 'copel', 'light'
         ],
         'Online': [
-            'amazon', 'mercado livre', 'magalu', 'americanas', 'submarino',
+            'amazon', 'mercado livre', 'magalu', 'magalupay', 'americanas', 'submarino',
             'shoptime', 'casas bahia', 'netshoes', 'centauro', 'aliexpress',
             'ebay', 'etsy', 'wish', 'shein', 'pagseguro international', 'zaful'
         ],
@@ -227,11 +206,23 @@ def categorizar_transacao(descricao):
         ]
     }
     
-    # Verificar cada categoria
+    # PRIMEIRO: Verificar categorias específicas (antes de transferências)
+    # Isso garante que "Mc Donalds", "Taguatinga", etc vão para categorias certas
     for categoria, palavras_chave in categorias.items():
         for palavra in palavras_chave:
             if palavra in descricao_lower:
                 return categoria
+    
+    # SEGUNDO: Verificar se é transferência/PIX
+    palavras_transferencia = ['pix', 'ted', 'doc', 'transferencia', 'transferência', 'recebido', 'enviado']
+    for palavra in palavras_transferencia:
+        if palavra in descricao_lower:
+            return 'Transferências'
+    
+    # TERCEIRO: Verificar se parece ser nome de pessoa (PIX para pessoa física)
+    # Só chega aqui se não matchou nenhuma categoria específica
+    if eh_nome_pessoa(descricao):
+        return 'Transferências'
     
     return 'Outros'
 
