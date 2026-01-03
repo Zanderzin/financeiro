@@ -47,8 +47,8 @@ Dashboard avançado para análise de extratos bancários do Banco Inter com cate
 
 1. **Clone o repositório**
 ```bash
-git clone https://github.com/seu-usuario/dashboard-financeiro-inter.git
-cd dashboard-financeiro-inter
+git clone https://github.com/Zanderzin/financeiro.git
+cd financeiro
 ```
 
 2. **Crie um ambiente virtual (recomendado)**
