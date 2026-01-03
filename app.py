@@ -3,6 +3,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
+import os
 from datetime import datetime, timedelta
 
 from src.data_loader import load_csv
@@ -75,30 +76,82 @@ if arquivo:
         df = load_csv(arquivo)
         df = preprocess(df)
         
-        # Aplicar categorização automática
-        df['categoria'] = df['descricao'].apply(categorizar_transacao)
+        # Aplicar categorização (IA ou palavras-chave)
+        if usar_ia and api_key_input:
+            with st.spinner("🤖 Categorizando com IA... (pode levar alguns segundos)"):
+                df['categoria'] = df.apply(
+                    lambda row: categorizar_transacao(row['descricao'], row.get('historico', '')),
+                    axis=1
+                )
+                st.success("✅ Categorização por IA concluída!")
+        else:
+            df['categoria'] = df['descricao'].apply(categorizar_transacao)
     
     st.success("✅ Extrato carregado e categorizado com sucesso!")
     
     # Sidebar com filtros
     st.sidebar.header("🔍 Filtros")
     
-    # Filtro de data
-    data_min = df['data'].min()
-    data_max = df['data'].max()
+    # Opção de usar IA para categorização
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("🤖 Categorização com IA")
     
-    date_range = st.sidebar.date_input(
-        "Período de Análise",
-        value=(data_min, data_max),
-        min_value=data_min,
-        max_value=data_max
+    usar_ia = st.sidebar.checkbox(
+        "Usar IA para categorizar",
+        value=False,
+        help="Usa GPT ou Claude para categorização mais precisa (requer API key)"
     )
     
-    if len(date_range) == 2:
-        df_filtrado = df[(df['data'] >= pd.Timestamp(date_range[0])) & 
-                         (df['data'] <= pd.Timestamp(date_range[1]))]
-    else:
-        df_filtrado = df
+    api_key_input = None
+    if usar_ia:
+        api_provider = st.sidebar.radio(
+            "Provedor de IA:",
+            ["OpenAI (GPT)", "Anthropic (Claude)"],
+            help="Escolha qual API usar"
+        )
+        
+        api_key_input = st.sidebar.text_input(
+            "API Key:",
+            type="password",
+            help="Cole sua chave da API aqui. Custo: ~$0.05 por 1000 transações"
+        )
+        
+        if api_key_input:
+            os.environ['OPENAI_API_KEY' if api_provider == "OpenAI (GPT)" else 'ANTHROPIC_API_KEY'] = api_key_input
+            st.sidebar.success("✅ API configurada!")
+            st.sidebar.info(f"💰 Custo estimado: ~${len(df) * 0.00005:.4f} para {len(df)} transações")
+    
+    st.sidebar.markdown("---")
+    
+    # Filtro de data
+    data_min = df['data'].min().date()
+    data_max = df['data'].max().date()
+    
+    st.sidebar.markdown("**📅 Período de Análise**")
+    
+    col_data1, col_data2 = st.sidebar.columns(2)
+    
+    with col_data1:
+        data_inicio = st.date_input(
+            "De:",
+            value=data_min,
+            min_value=data_min,
+            max_value=data_max,
+            format="DD/MM/YYYY"
+        )
+    
+    with col_data2:
+        data_fim = st.date_input(
+            "Até:",
+            value=data_max,
+            min_value=data_min,
+            max_value=data_max,
+            format="DD/MM/YYYY"
+        )
+    
+    # Filtrar dados pelo período
+    df_filtrado = df[(df['data'] >= pd.Timestamp(data_inicio)) & 
+                     (df['data'] <= pd.Timestamp(data_fim))]
     
     # Filtro de categoria
     categorias_unicas = sorted(df_filtrado['categoria'].unique())
@@ -481,23 +534,8 @@ if arquivo:
             # Análise de sazonalidade
             dias_semana = df_filtrado[df_filtrado['valor'] < 0].copy()
             dias_semana['dia_semana'] = dias_semana['data'].dt.day_name()
-
-            # Dicionário para tradução dos dias da semana
-            traducao_dias = {
-                'Monday': 'Segunda-feira',
-                'Tuesday': 'Terça-feira',
-                'Wednesday': 'Quarta-feira',
-                'Thursday': 'Quinta-feira',
-                'Friday': 'Sexta-feira',
-                'Saturday': 'Sábado',
-                'Sunday': 'Domingo'
-            }
-
-            # Traduzir os dias para português
-            dias_semana['dia_semana'] = dias_semana['dia_semana'].map(traducao_dias)
-
             gastos_por_dia = dias_semana.groupby('dia_semana')['valor'].sum().abs()
-
+            
             if not gastos_por_dia.empty:
                 dia_mais_gasto = gastos_por_dia.idxmax()
                 st.info(f"📅 Você tende a gastar mais às **{dia_mais_gasto}s**")
