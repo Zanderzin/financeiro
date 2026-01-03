@@ -61,13 +61,13 @@ def categorizar_transacao(descricao):
         'Alimentação': [
             'ifood', 'quentinhas', 'sabor', 'macarons', 'nino', 'loucos por burger', 'biscoitos', 'rappi', 'bolos', 'uber eats', 'restaurante', 'lanchonete',
             'padaria', 'dog', 'mcdonalds', 'sucoetal', 'bacio', 'bauducco', 'lancheteria', 'benedito', 'veloce', 'creperia', 'marmitexleo', 'mercado', 'taguatinga', 'supermercado', 'açougue', 'hortifruti',
-            'pizza', 'burger', 'casa do pao', 'big box', 'burguer', 'imperio dos paes', 'mc donald', 'bobs', 'subway', 'giraffas',
+            'pizza', 'burger', 'distribuidora', 'fini', 'casa do pao', 'pao', 'big box', 'burguer', 'imperio dos paes', 'mc donald', 'bobs', 'subway', 'giraffas',
             'outback', 'dominos', 'abbraccio', 'coco bambu', 'spoleto', 'habibs', 'leonardobianoda',
             'american cookies', 'sorbe', 'cafe', 'bakery', 'pao de acucar', 'carrefour',
             'extra', 'walmart', 'assai', 'luzia De Fatima Miranda', 'atacadao'
         ],
         'Transporte': [
-            'uber', 'iguatemi', 'estacionament', 'lyft', 'cabify', '99', 'taxi', 'combustivel', 'gasolina',
+            'uber', 'iguatemi', 'car', 'combustiveis', 'estacionament', 'lyft', 'cabify', '99', 'taxi', 'combustivel', 'gasolina',
             'posto', 'park', 'parkshopping', 'petronorte', 'shell','boulevard', 'ipiranga', 'br petroleo', 'petrobras',
             'estacionamento', 'valet', 'onibus', 'metro', 'metrô', 'transporte',
             'pedágio', 'pedagio', 'viacard', 'carlos ieje de sena', 'sem parar'
@@ -80,20 +80,26 @@ def categorizar_transacao(descricao):
             'shoptime', 'casas bahia', 'netshoes', 'centauro', 'aliexpress',
             'ebay', 'etsy', 'wish', 'shein', 'pagseguro international', 'zaful',
         ],
+        'Mensalidades': [
+            'netflix', 'spotify', 'disney plus', 'hbo max', 'amazon prime',
+            'globoplay', 'fatura', 'youtube premium', 'apple music', 'deezer',
+            'google drive', 'dropbox', 'icloud', 'one drive', 'adobe',
+            'canva', 'notion', 'evernote', 'slack', 'zoom', 'microsoft 365'
+        ],
         'Saúde': [
             'farmacia', 'farmácia', 'drogaria', 'drogasil', 'pacheco',
             'pague menos', 'hospital', 'clinica', 'clínica', 'laboratorio',
-            'laboratório', 'médico', 'medico', 'dentista', 'plano de saude', 'unimed', 'amil', 'sulamerica', 'bradesco saude'
+            'laboratório', 'médico', 'medico', 'dentista', 'plano de saúde', 'unimed', 'amil', 'sulamerica', 'bradesco saude'
         ],
         'Educação': [
             'escola', 'faculdade', 'universidade', 'curso', 'livro', 'livraria',
-            'material escolar', 'papelaria', 'udemy', 'coursera', 'alura',
+            'material escolar', 'estacio', 'ceub', 'unieuro', 'edx', 'alura', 'iesb', 'projecao', 'udf', 'papelaria', 'udemy', 'coursera', 'alura',
             'kaplan', 'wizard', 'ccaa', 'cna', 'fisk'
         ],
         'Lazer': [
             'cinema', 'ciatoy', 'teatro', 'ri happy', 'ingresso', 'netflix', 'spotify',
-            'amazon prime', 'disney', 'hbo', 'apple music', 'deezer',
-            'youtube premium', 'globoplay', 'crunchyroll', 'paramount',
+            'amazon prime', 'ticket', 'disney', 'hbo', 'apple music', 'deezer',
+            'youtube premium', 'entretenimento', 'globoplay', 'crunchyroll', 'paramount',
             'steam', 'playstation', 'xbox', 'nintendo', 'game'
         ],
         'Vestuário': [
@@ -112,7 +118,7 @@ def categorizar_transacao(descricao):
         ],
         'Investimentos': [
             'investimento', 'aplicacao', 'aplicação', 'poupanca', 'poupança',
-            'tesouro', 'cdb', 'lci', 'lca', 'acao', 'ações', 'fundo'
+            'tesouro', 'cdb', 'lci', 'lca', 'acao', 'ações', 'lig liquidez', 'fundo'
         ]
     }
     

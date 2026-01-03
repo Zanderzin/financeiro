@@ -481,8 +481,23 @@ if arquivo:
             # Análise de sazonalidade
             dias_semana = df_filtrado[df_filtrado['valor'] < 0].copy()
             dias_semana['dia_semana'] = dias_semana['data'].dt.day_name()
+
+            # Dicionário para tradução dos dias da semana
+            traducao_dias = {
+                'Monday': 'Segunda-feira',
+                'Tuesday': 'Terça-feira',
+                'Wednesday': 'Quarta-feira',
+                'Thursday': 'Quinta-feira',
+                'Friday': 'Sexta-feira',
+                'Saturday': 'Sábado',
+                'Sunday': 'Domingo'
+            }
+
+            # Traduzir os dias para português
+            dias_semana['dia_semana'] = dias_semana['dia_semana'].map(traducao_dias)
+
             gastos_por_dia = dias_semana.groupby('dia_semana')['valor'].sum().abs()
-            
+
             if not gastos_por_dia.empty:
                 dia_mais_gasto = gastos_por_dia.idxmax()
                 st.info(f"📅 Você tende a gastar mais às **{dia_mais_gasto}s**")
