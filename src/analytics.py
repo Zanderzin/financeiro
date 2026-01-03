@@ -46,64 +46,173 @@ def gasto_por_categoria(df):
     )
 
 
+def eh_nome_pessoa(texto):
+    """
+    Detecta se o texto parece ser um nome de pessoa (para PIX/transferências)
+    """
+    if pd.isna(texto):
+        return False
+    
+    texto = texto.lower().strip()
+    
+    # Remove números e caracteres especiais comuns em CNPJs
+    tem_muitos_numeros = sum(c.isdigit() for c in texto) > len(texto) * 0.3
+    if tem_muitos_numeros:
+        return False
+    
+    # Palavras que indicam que NÃO é pessoa (empresas, estabelecimentos)
+    palavras_empresa = [
+        'ltda', 'eireli', 'sa', 's.a', 's/a', 'me', 'epp', 'comercio', 
+        'agencia', 'restaurante', 'loja', 'bar', 'padaria', 'mercado',
+        'posto', 'shopping', 'center', 'magazine', 'supermercado',
+        'delivery', 'express', 'online', 'store', 'shop', 'company',
+        'distribuidora', 'ifood', 'uber', 'rappi', 'ticket', 'estacio',
+        'cinema', 'teatro', 'hospital', 'clinica', 'farmacia', 'drogaria'
+    ]
+    
+    for palavra in palavras_empresa:
+        if palavra in texto:
+            return False
+    
+    # Padrões comuns de nomes brasileiros
+    palavras = texto.split()
+    
+    # Se tem 2+ palavras e nenhuma é empresa, provavelmente é nome
+    if len(palavras) >= 2:
+        # Lista de nomes comuns brasileiros (primeiros nomes e sobrenomes)
+        nomes_comuns = [
+            # Primeiros nomes comuns
+            'jose', 'maria', 'joao', 'ana', 'antonio', 'francisco', 'carlos',
+            'paulo', 'pedro', 'lucas', 'marcos', 'gabriel', 'rafael', 'bruno',
+            'thiago', 'felipe', 'gustavo', 'ricardo', 'roberto', 'mariana',
+            'juliana', 'adriana', 'fernanda', 'camila', 'beatriz', 'leticia',
+            'sophia', 'isabela', 'larissa', 'natasha', 'victor', 'matheus',
+            'daniel', 'eduardo', 'leonardo', 'henrique', 'gabriela', 'carolina',
+            'bianca', 'aline', 'carla', 'daniela', 'eliana', 'renata', 'simone',
+            'fernando', 'rodrigo', 'patricia', 'sandra', 'juliana', 'fernanda',
+            'camila', 'beatriz', 'luciana', 'mariana', 'amanda', 'julia',
+            'bruna', 'larissa', 'natalia', 'vanessa', 'marcelo', 'eduardo',
+            'gustavo', 'felipe', 'diego', 'vitor', 'matheus', 'thiago',
+            'ricardo', 'roberto', 'sergio', 'luis', 'luciene', 'bernardo',
+            'alexander', 'alessandra', 'giovanna', 'paula', 'jonatas',
+            'alex', 'teixeira', 'macedo', 'francisca', 'helena', 'isabela',
+            'laura', 'sophia', 'yara', 'aline', 'carla', 'daniela', 'eliana',
+            'renata', 'simone', 'tatiana', 'adriana', 'claudia', 'cristina',
+            'daniele', 'elisabeth', 'flavia', 'gabriela', 'isabel', 'karen',
+            'leticia', 'marina', 'natasha', 'priscila', 'raquel', 'sandra',
+            'thais', 'valeria', 'vivian', 'wallace', 'willian',
+            'yuri', 'zeca',
+            # Sobrenomes comuns
+            'silva', 'santos', 'oliveira', 'souza', 'costa', 'ferreira', 
+            'rodrigues', 'almeida', 'nascimento', 'lima', 'araujo', 'ribeiro', 
+            'carvalho', 'martins', 'dias', 'lopes', 'gomes', 'mendes', 'barros', 
+            'cardoso', 'rocha', 'miranda', 'duarte', 'monteiro', 'freitas', 
+            'barbosa', 'campos', 'aquino', 'morais', 'brandao', 'macena'
+            'freire', 'pires', 'siqueira', 'assis', 'cunha', 'vieira',
+            'tavares', 'pontes', 'sampaio', 'serra', 'farias', 'moura'
+        ]
+        
+        # Verifica se alguma palavra do texto está na lista de nomes
+        for palavra in palavras:
+            if len(palavra) > 2 and palavra in nomes_comuns:
+                return True
+        
+        # Se tem 2-4 palavras de tamanho razoável, provavelmente é nome
+        if 2 <= len(palavras) <= 4:
+            palavras_validas = [p for p in palavras if len(p) > 2]
+            if len(palavras_validas) >= 2:
+                # Verifica se não tem palavras muito comerciais
+                palavras_comerciais = ['delivery', 'express', 'online', 'store', 'shop']
+                tem_comercial = any(pc in texto for pc in palavras_comerciais)
+                if not tem_comercial:
+                    return True
+    
+    return False
+
+
 def categorizar_transacao(descricao):
     """
     Categoriza automaticamente uma transação com base na descrição
-    usando palavras-chave inteligentes
+    usando palavras-chave inteligentes + detecção automática de nomes
     """
     if pd.isna(descricao):
         return 'Outros'
     
-    descricao = descricao.lower()
+    descricao_lower = descricao.lower()
+    
+    # PRIMEIRO: Verificar se é transferência/PIX (antes de outras categorias)
+    palavras_transferencia = ['pix', 'ted', 'doc', 'transferencia', 'transferência', 'recebido', 'enviado']
+    for palavra in palavras_transferencia:
+        if palavra in descricao_lower:
+            return 'Transferências'
+    
+    # Verificar se parece ser nome de pessoa (PIX para pessoa física)
+    if eh_nome_pessoa(descricao):
+        return 'Transferências'
     
     # Dicionário de categorias com palavras-chave
     categorias = {
         'Alimentação': [
-            'ifood', 'quentinhas', 'sabor', 'macarons', 'nino', 'loucos por burger', 'biscoitos', 'rappi', 'bolos', 'uber eats', 'restaurante', 'lanchonete',
-            'padaria', 'dog', 'mcdonalds', 'sucoetal', 'bacio', 'bauducco', 'lancheteria', 'benedito', 'veloce', 'creperia', 'marmitexleo', 'mercado', 'taguatinga', 'supermercado', 'açougue', 'hortifruti',
-            'pizza', 'burger', 'distribuidora', 'fini', 'casa do pao', 'pao', 'big box', 'burguer', 'imperio dos paes', 'mc donald', 'bobs', 'subway', 'giraffas',
-            'outback', 'dominos', 'abbraccio', 'coco bambu', 'spoleto', 'habibs', 'leonardobianoda',
-            'american cookies', 'sorbe', 'cafe', 'bakery', 'pao de acucar', 'carrefour',
-            'extra', 'walmart', 'assai', 'luzia De Fatima Miranda', 'atacadao'
+            'ifood', 'quentinhas', 'sabor', 'macarons', 'nino', 'loucos por burger', 
+            'biscoitos', 'rappi', 'bolos', 'uber eats', 'restaurante', 'lanchonete',
+            'padaria', 'dog', 'mcdonalds', 'sucoetal', 'bacio', 'bauducco', 
+            'lancheteria', 'benedito', 'veloce', 'creperia', 'marmitexleo', 
+            'mercado', 'taguatinga', 'supermercado', 'açougue', 'hortifruti',
+            'pizza', 'burger', 'distribuidora', 'fini', 'casa do pao', 'pao', 
+            'big box', 'burguer', 'imperio dos paes', 'mc donald', 'bobs', 
+            'subway', 'giraffas', 'outback', 'dominos', 'torta', 'dona', 
+            'abbraccio', 'coco bambu', 'spoleto', 'habibs', 'leonardobianoda',
+            'american cookies', 'sorbe', 'cafe', 'bakery', 'pao de acucar', 
+            'carrefour', 'extra', 'walmart', 'assai', 'luzia de fatima miranda', 
+            'atacadao'
         ],
         'Transporte': [
-            'uber', 'iguatemi', 'car', 'combustiveis', 'estacionament', 'lyft', 'cabify', '99', 'taxi', 'combustivel', 'gasolina',
-            'posto', 'park', 'parkshopping', 'petronorte', 'shell','boulevard', 'ipiranga', 'br petroleo', 'petrobras',
-            'estacionamento', 'valet', 'onibus', 'metro', 'metrô', 'transporte',
-            'pedágio', 'pedagio', 'viacard', 'carlos ieje de sena', 'sem parar'
+            'uber', 'iguatemi', 'car', 'combustiveis', 'estacionament', 'lyft', 
+            'cabify', '99', 'taxi', 'combustivel', 'gasolina', 'posto', 'park', 
+            'parkshopping', 'petronorte', 'shell', 'boulevard', 'ipiranga', 
+            'br petroleo', 'petrobras', 'estacionamento', 'valet', 'onibus', 
+            'metro', 'metrô', 'transporte', 'pedágio', 'pedagio', 'viacard', 
+            'carlos ieje de sena', 'sem parar'
         ],
         'Moradia': [
-            'aluguel'
+            'aluguel', 'condominio', 'condomínio', 'iptu', 'luz', 'agua',
+            'água', 'gas', 'gás', 'internet', 'telefone', 'neoenergia',
+            'caesb', 'correios', 'celpe', 'cemig', 'copel', 'light'
         ],
         'Online': [
             'amazon', 'mercado livre', 'magalu', 'americanas', 'submarino',
             'shoptime', 'casas bahia', 'netshoes', 'centauro', 'aliexpress',
-            'ebay', 'etsy', 'wish', 'shein', 'pagseguro international', 'zaful',
+            'ebay', 'etsy', 'wish', 'shein', 'pagseguro international', 'zaful'
         ],
         'Mensalidades': [
             'netflix', 'spotify', 'disney plus', 'hbo max', 'amazon prime',
-            'globoplay', 'fatura', 'youtube premium', 'apple music', 'deezer',
-            'google drive', 'dropbox', 'icloud', 'one drive', 'adobe',
-            'canva', 'notion', 'evernote', 'slack', 'zoom', 'microsoft 365'
+            'globoplay', 'fatura', 'youtube premium', 'tim', 'claro', 'vivo', 
+            'oi', 'laricell', 'apple music', 'deezer', 'google drive', 'dropbox', 
+            'icloud', 'one drive', 'adobe', 'canva', 'notion', 'evernote', 
+            'slack', 'zoom', 'microsoft 365'
         ],
         'Saúde': [
             'farmacia', 'farmácia', 'drogaria', 'drogasil', 'pacheco',
             'pague menos', 'hospital', 'clinica', 'clínica', 'laboratorio',
-            'laboratório', 'médico', 'medico', 'dentista', 'plano de saúde', 'unimed', 'amil', 'sulamerica', 'bradesco saude'
+            'laboratório', 'médico', 'medico', 'dentista', 'fisioterapia',
+            'plano de saude', 'unimed', 'amil', 'sulamerica', 'bradesco saude',
+            'advance fisioterapia'  # Específico do seu extrato
         ],
         'Educação': [
             'escola', 'faculdade', 'universidade', 'curso', 'livro', 'livraria',
-            'material escolar', 'estacio', 'ceub', 'unieuro', 'edx', 'alura', 'iesb', 'projecao', 'udf', 'papelaria', 'udemy', 'coursera', 'alura',
+            'material escolar', 'estacio', 'ceub', 'unieuro', 'edx', 'alura', 
+            'iesb', 'projecao', 'udf', 'papelaria', 'udemy', 'coursera',
             'kaplan', 'wizard', 'ccaa', 'cna', 'fisk'
         ],
         'Lazer': [
-            'cinema', 'ciatoy', 'teatro', 'ri happy', 'ingresso', 'netflix', 'spotify',
-            'amazon prime', 'ticket', 'disney', 'hbo', 'apple music', 'deezer',
-            'youtube premium', 'entretenimento', 'globoplay', 'crunchyroll', 'paramount',
-            'steam', 'playstation', 'xbox', 'nintendo', 'game'
+            'cinema', 'ciatoy', 'teatro', 'ri happy', 'ingresso', 'netflix', 
+            'spotify', 'amazon prime', 'ticket', 'disney', 'hbo', 'apple music', 
+            'deezer', 'youtube premium', 'entretenimento', 'globoplay', 
+            'crunchyroll', 'paramount', 'steam', 'playstation', 'xbox', 
+            'nintendo', 'game'
         ],
         'Vestuário': [
-            'renner', 'alessandra', 'riachuelo', 'c&a', 'zara', 'hering', 'marisa',
+            'renner', 'riachuelo', 'c&a', 'zara', 'hering', 'marisa',
             'pernambucanas', 'magazine luiza', 'nike', 'adidas', 'centauro',
             'netshoes', 'decathlon', 'roupa', 'calcado', 'calçado', 'sapato'
         ],
@@ -111,10 +220,6 @@ def categorizar_transacao(descricao):
             'salao', 'salão', 'barbearia', 'cabeleireiro', 'manicure',
             'academia', 'smartfit', 'bluefit', 'bio ritmo', 'lavanderia',
             'costureira', 'chaveiro', 'encanador', 'eletricista'
-        ],
-        'Transferências': [
-            'pix', 'beatriz teixeira macedo', 'advance fisioterapia', 'ted', 'luciene macena de aquino', 'jonatas alexander','paula francisca', 'bernardo alexander aquino de morais', 'doc', 'transferencia', 'transferência',
-            'recebido', 'bernardo a aquino morais','enviado'
         ],
         'Investimentos': [
             'investimento', 'aplicacao', 'aplicação', 'poupanca', 'poupança',
@@ -125,7 +230,7 @@ def categorizar_transacao(descricao):
     # Verificar cada categoria
     for categoria, palavras_chave in categorias.items():
         for palavra in palavras_chave:
-            if palavra in descricao:
+            if palavra in descricao_lower:
                 return categoria
     
     return 'Outros'
