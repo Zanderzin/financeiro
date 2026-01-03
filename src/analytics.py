@@ -86,19 +86,24 @@ def eh_nome_pessoa(texto):
             # Primeiros nomes comuns
             'jose', 'maria', 'joao', 'ana', 'antonio', 'francisco', 'carlos',
             'paulo', 'pedro', 'lucas', 'marcos', 'gabriel', 'rafael', 'bruno',
+            'guilherme', 'felipe', 'thiago', 'roberto', 'ricardo', 'mariana',
+            'juliana', 'adriana', 'fernanda', 'camila', 'beatriz', 'luciana',
             'fernando', 'rodrigo', 'patricia', 'sandra', 'juliana', 'fernanda',
             'camila', 'beatriz', 'luciana', 'mariana', 'amanda', 'julia',
             'bruna', 'larissa', 'natalia', 'vanessa', 'marcelo', 'eduardo',
             'gustavo', 'felipe', 'diego', 'vitor', 'matheus', 'thiago',
             'ricardo', 'roberto', 'sergio', 'luis', 'luciene', 'bernardo',
             'alexander', 'alessandra', 'giovanna', 'paula', 'jonatas',
-            'alex', 'teixeira', 'macedo', 'francisca',
+            'alex', 'teixeira', 'macedo', 'francisca', 'henrique', 'rafaela',
+            'aline', 'cintia', 'daniela', 'eliana'
             # Sobrenomes comuns
             'silva', 'santos', 'oliveira', 'souza', 'costa', 'ferreira', 
             'rodrigues', 'almeida', 'nascimento', 'lima', 'araujo', 'ribeiro', 
             'carvalho', 'martins', 'dias', 'lopes', 'gomes', 'mendes', 'barros', 
             'cardoso', 'rocha', 'miranda', 'duarte', 'monteiro', 'freitas', 
-            'barbosa', 'campos', 'aquino', 'morais', 'brandao', 'macena'
+            'barbosa', 'campos', 'aquino', 'morais', 'brandao', 'macena',
+            'souza', 'pires', 'tavares', 'assis', 'cavalcante', 'farias',
+            'barboza', 'siqueira', 'vieira', 'cunha', 'pontes', 'serra'
         ]
         
         # Verifica se alguma palavra do texto está na lista de nomes
