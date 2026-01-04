@@ -25,40 +25,336 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# CSS customizado para melhor contraste
+# CSS customizado completo para personalização total
 st.markdown("""
 <style>
-    .stMetric {
-        background-color: #1e1e1e;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        border: 1px solid #333;
+    /* ==================== CONFIGURAÇÕES GERAIS ==================== */
+    
+    /* Fundo principal do app */
+    .stApp {
+        background-color: #0E1117;
+        background-image: linear-gradient(180deg, #0E1117 0%, #1a1d24 100%);
     }
+    
+    /* ==================== SIDEBAR (BARRA LATERAL) ==================== */
+    
+    /* Fundo da sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: #1e1e1e;
+        background-image: linear-gradient(180deg, #1e1e1e 0%, #262730 100%);
+    }
+    
+    /* Texto da sidebar */
+    section[data-testid="stSidebar"] * {
+        color: #ffffff !important;
+    }
+    
+    /* Título/Header da sidebar */
+    section[data-testid="stSidebar"] h1,
+    section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3 {
+        color: ##1E88E5 !important;
+    }
+    
+    /* Divisores na sidebar */
+    section[data-testid="stSidebar"] hr {
+        border-color: #1E88E5;
+        opacity: 0.3;
+    }
+    
+    /* ==================== CARDS DE MÉTRICAS ==================== */
+    
+    .stMetric {
+        background: linear-gradient(135deg, #1e1e1e 0%, #262730 100%);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        border: 1px solid #333;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    /* Efeito hover nos cards */
+    .stMetric:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(30,136,229,0.2);
+        border-color: #1E88E5;
+    }
+    
+    /* Label das métricas */
     .stMetric label {
         color: #b0b0b0 !important;
         font-size: 0.9rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
+    
+    /* Valor das métricas */
     .stMetric [data-testid="stMetricValue"] {
         color: #ffffff !important;
-        font-size: 1.8rem !important;
+        font-size: 2rem !important;
         font-weight: 700 !important;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
+    
+    /* Delta das métricas */
     .stMetric [data-testid="stMetricDelta"] {
         font-size: 0.85rem !important;
+        font-weight: 600 !important;
     }
+    
+    /* ==================== ABAS ==================== */
+    
+    /* Container das abas */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background-color: #1e1e1e;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    /* Abas individuais */
+    .stTabs [data-baseweb="tab"] {
+        background-color: #262730;
+        border-radius: 8px;
+        padding: 12px 24px;
+        color: #ffffff;
+        font-weight: 600;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    /* Aba ativa */
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%);
+        border-color: #1E88E5;
+        box-shadow: 0 4px 12px rgba(30,136,229,0.3);
+    }
+    
+    /* Aba hover */
+    .stTabs [data-baseweb="tab"]:hover {
+        background-color: #333;
+        border-color: #1E88E5;
+    }
+    
+    /* ==================== BOTÕES ==================== */
+    
+    /* Botão principal */
+    .stButton > button {
+        background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(255,107,0,0.3);
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255,107,0,0.4);
+    }
+    
+    /* Botão de download */
+    .stDownloadButton > button {
+        background: linear-gradient(135deg, #51CF66 0%, #40c057 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(81,207,102,0.3);
+    }
+    
+    /* ==================== INPUTS ==================== */
+    
+    /* Text input, select, etc */
+    .stTextInput > div > div > input,
+    .stSelectbox > div > div > div,
+    .stMultiSelect > div > div > div {
+        background-color: #262730;
+        color: #ffffff;
+        border: 2px solid #333;
+        border-radius: 8px;
+        transition: border-color 0.3s ease;
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stSelectbox > div > div > div:focus {
+        border-color: #1E88E5;
+        box-shadow: 0 0 0 2px rgba(30,136,229,0.2);
+    }
+    
+    /* ==================== ALERTAS ==================== */
+    
     .stAlert {
         border-radius: 10px;
-    }
-    div[data-testid="stExpander"] {
-        border: 1px solid #333;
-        border-radius: 10px;
+        border-left: 4px solid #1E88E5;
         background-color: #1e1e1e;
+    }
+    
+    /* Success */
+    .stSuccess {
+        border-left-color: #51CF66;
+        background-color: rgba(81,207,102,0.1);
+    }
+    
+    /* Warning */
+    .stWarning {
+        border-left-color: #FFD43B;
+        background-color: rgba(255,212,59,0.1);
+    }
+    
+    /* Error */
+    .stError {
+        border-left-color: #1E88E5;
+        background-color: rgba(30,136,229,0.1);
+    }
+    
+    /* Info */
+    .stInfo {
+        border-left-color: #4DABF7;
+        background-color: rgba(77,171,247,0.1);
+    }
+    
+    /* ==================== EXPANDERS ==================== */
+    
+    div[data-testid="stExpander"] {
+        border: 2px solid #333;
+        border-radius: 12px;
+        background-color: #1e1e1e;
+        transition: border-color 0.3s ease;
+    }
+    
+    div[data-testid="stExpander"]:hover {
+        border-color: #1E88E5;
+    }
+    
+    /* Header do expander */
+    div[data-testid="stExpander"] summary {
+        color: #ffffff;
+        font-weight: 600;
+        padding: 16px;
+    }
+    
+    /* ==================== DATAFRAMES/TABELAS ==================== */
+    
+    /* Container da tabela */
+    .stDataFrame {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    /* Header da tabela */
+    .stDataFrame thead tr th {
+        background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%);
+        color: white !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none;
+    }
+    
+    /* Linhas da tabela */
+    .stDataFrame tbody tr {
+        background-color: #1e1e1e;
+        border-bottom: 1px solid #333;
+        transition: background-color 0.2s ease;
+    }
+    
+    .stDataFrame tbody tr:hover {
+        background-color: #262730;
+    }
+    
+    /* ==================== SLIDER ==================== */
+    
+    .stSlider > div > div > div > div {
+        background-color: #1E88E5;
+    }
+    
+    .stSlider > div > div > div > div > div {
+        background-color: #42A5F5;
+    }
+    
+    /* ==================== FILE UPLOADER ==================== */
+    
+    .stFileUploader {
+        background-color: #1e1e1e;
+        border: 2px dashed #1E88E5;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .stFileUploader:hover {
+        border-color: #4285F4;
+        background-color: #262730;
+    }
+    
+    /* ==================== SCROLLBAR ==================== */
+    
+    /* Scrollbar no geral */
+    ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #1e1e1e;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%);
+        border-radius: 6px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%);
+    }
+    
+    /* ==================== TÍTULOS E TEXTO ==================== */
+    
+    h1, h2, h3 {
+        color: #ffffff;
+        font-weight: 700;
+    }
+    
+    p, span, div {
+        color: #e0e0e0;
+    }
+    
+    /* ==================== RADIO BUTTONS ==================== */
+    
+    .stRadio > div {
+        background-color: #1e1e1e;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    
+    /* ==================== DIVISORES ==================== */
+    
+    hr {
+        border-color: #1E88E5;
+        opacity: 0.3;
+        margin: 2rem 0;
+    }
+    
+    /* ==================== ANIMAÇÕES ==================== */
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .stMetric {
+        animation: fadeIn 0.5s ease-out;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 style='text-align: center; color: #FF6B00;'>💳 Dashboard Financeiro Avançado</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #1E88E5;'>💳 Dashboard Financeiro Avançado</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #888; font-size: 1.1rem;'>Análise completa e inteligente do seu extrato Banco Inter</p>", unsafe_allow_html=True)
 st.markdown("---")
 

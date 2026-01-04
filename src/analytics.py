@@ -86,24 +86,19 @@ def eh_nome_pessoa(texto):
             # Primeiros nomes comuns
             'jose', 'maria', 'joao', 'ana', 'antonio', 'francisco', 'carlos',
             'paulo', 'pedro', 'lucas', 'marcos', 'gabriel', 'rafael', 'bruno',
-            'guilherme', 'felipe', 'thiago', 'roberto', 'ricardo', 'mariana',
-            'juliana', 'adriana', 'fernanda', 'camila', 'beatriz', 'luciana',
             'fernando', 'rodrigo', 'patricia', 'sandra', 'juliana', 'fernanda',
             'camila', 'beatriz', 'luciana', 'mariana', 'amanda', 'julia',
             'bruna', 'larissa', 'natalia', 'vanessa', 'marcelo', 'eduardo',
             'gustavo', 'felipe', 'diego', 'vitor', 'matheus', 'thiago',
             'ricardo', 'roberto', 'sergio', 'luis', 'luciene', 'bernardo',
             'alexander', 'alessandra', 'giovanna', 'paula', 'jonatas',
-            'alex', 'teixeira', 'macedo', 'francisca', 'henrique', 'rafaela',
-            'aline', 'cintia', 'daniela', 'eliana'
+            'alex', 'teixeira', 'macedo', 'francisca',
             # Sobrenomes comuns
             'silva', 'santos', 'oliveira', 'souza', 'costa', 'ferreira', 
             'rodrigues', 'almeida', 'nascimento', 'lima', 'araujo', 'ribeiro', 
             'carvalho', 'martins', 'dias', 'lopes', 'gomes', 'mendes', 'barros', 
             'cardoso', 'rocha', 'miranda', 'duarte', 'monteiro', 'freitas', 
-            'barbosa', 'campos', 'aquino', 'morais', 'brandao', 'macena',
-            'souza', 'pires', 'tavares', 'assis', 'cavalcante', 'farias',
-            'barboza', 'siqueira', 'vieira', 'cunha', 'pontes', 'serra'
+            'barbosa', 'campos', 'aquino', 'morais', 'brandao', 'macena'
         ]
         
         # Verifica se alguma palavra do texto está na lista de nomes
@@ -236,6 +231,19 @@ def calcular_metricas_avancadas(df):
     """
     Calcula métricas avançadas do extrato
     """
+    # Verificar se o DataFrame não está vazio
+    if df.empty:
+        return {
+            'total_gastos': 0,
+            'total_entradas': 0,
+            'ticket_medio': 0,
+            'maior_gasto': 0,
+            'gasto_medio_diario': 0,
+            'categoria_top': 'N/A',
+            'variacao_gastos': 0,
+            'variacao_entradas': 0
+        }
+    
     # Separar gastos e entradas
     gastos = df[df['valor'] < 0]['valor'].abs()
     entradas = df[df['valor'] > 0]['valor']
@@ -260,13 +268,17 @@ def calcular_metricas_avancadas(df):
     
     # Categoria que mais gastou
     if 'categoria' in df.columns:
-        categoria_top = (
+        gastos_por_categoria = (
             df[df['valor'] < 0]
             .groupby('categoria')['valor']
             .sum()
             .abs()
-            .idxmax()
         )
+        
+        if len(gastos_por_categoria) > 0:
+            categoria_top = gastos_por_categoria.idxmax()
+        else:
+            categoria_top = 'N/A'
     else:
         categoria_top = 'N/A'
     
