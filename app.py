@@ -20,86 +20,102 @@ from src.analytics import (
 
 # Configuração da página
 st.set_page_config(
-    page_title="Dashboard Financeiro | Banco Inter",
+    page_title="Lumen - Dashboard Financeiro",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# CSS customizado completo para personalização total
+# CSS customizado - Paleta Navy, Teal & Sky Blue
 st.markdown("""
 <style>
+    /* ==================== PALETA DE CORES ====================
+    Navy: #2F4156
+    Teal: #597C9D
+    Sky Blue: #ACD9E6
+    Beige: #F5EFEB
+    White: #FFFFFF
+    =========================================================== */
+    /* =======CORES ORIGINAIS DO STREAMLIT PARA REFERÊNCIA======= */
+    /* Fundo padrão: #F0F2F6 */
+    /* Texto padrão: #262730 */
+    
     /* ==================== CONFIGURAÇÕES GERAIS ==================== */
     
     /* Fundo principal do app */
     .stApp {
-        background-color: #0E1117;
-        background-image: linear-gradient(180deg, #0E1117 0%, #1a1d24 100%);
+        background-image: #2F4156;
     }
-    
     /* ==================== SIDEBAR (BARRA LATERAL) ==================== */
     
     /* Fundo da sidebar */
     section[data-testid="stSidebar"] {
-        background-color: #1e1e1e;
-        background-image: linear-gradient(180deg, #1e1e1e 0%, #262730 100%);
+        background: linear-gradient(180deg, #2F4156 100%, #2F4156 100%);
+        box-shadow: 4px 0 20px rgba(0,0,0,0.1);
     }
     
     /* Texto da sidebar */
     section[data-testid="stSidebar"] * {
-        color: #ffffff !important;
+        color: #F5EFEB !important;
     }
     
     /* Título/Header da sidebar */
     section[data-testid="stSidebar"] h1,
     section[data-testid="stSidebar"] h2,
     section[data-testid="stSidebar"] h3 {
-        color: ##1E88E5 !important;
+        color: #F5EFEB !important;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     
     /* Divisores na sidebar */
     section[data-testid="stSidebar"] hr {
-        border-color: #1E88E5;
-        opacity: 0.3;
+        border-color: #F5EFEB;
+        opacity: 0.4;
+    }
+    
+    /* Labels da sidebar */
+    section[data-testid="stSidebar"] label {
+        color: #F5EFEB !important;
+        font-weight: 600 !important;
     }
     
     /* ==================== CARDS DE MÉTRICAS ==================== */
     
     .stMetric {
-        background: linear-gradient(135deg, #1e1e1e 0%, #262730 100%);
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-        border: 1px solid #333;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: linear-gradient(135deg, #2F4156 100%, #F5EFEB 100%);
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(47,65,86,0.15);
+        border: 2px solid #F5EFEB;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     /* Efeito hover nos cards */
     .stMetric:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 24px rgba(30,136,229,0.2);
-        border-color: #1E88E5;
+        transform: translateY(-8px);
+        box-shadow: 0 16px 32px rgba(89,124,157,0.25);
+        border-color: #597C9D;
     }
     
     /* Label das métricas */
     .stMetric label {
-        color: #b0b0b0 !important;
+        color: #597C9D !important;
         font-size: 0.9rem !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
     }
     
     /* Valor das métricas */
     .stMetric [data-testid="stMetricValue"] {
-        color: #ffffff !important;
-        font-size: 2rem !important;
-        font-weight: 700 !important;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        color: #2F4156 !important;
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
+        text-shadow: 0 2px 4px rgba(47,65,86,0.1);
     }
     
     /* Delta das métricas */
     .stMetric [data-testid="stMetricDelta"] {
-        font-size: 0.85rem !important;
+        font-size: 0.9rem !important;
         font-weight: 600 !important;
     }
     
@@ -107,18 +123,19 @@ st.markdown("""
     
     /* Container das abas */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background-color: #1e1e1e;
-        padding: 10px;
-        border-radius: 10px;
+        gap: 12px;
+        background: linear-gradient(135deg, #2F4156 0%, #3d5670 100%);
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     
     /* Abas individuais */
     .stTabs [data-baseweb="tab"] {
-        background-color: #262730;
-        border-radius: 8px;
-        padding: 12px 24px;
-        color: #ffffff;
+        background-color: rgba(172,217,230,0.15);
+        border-radius: 10px;
+        padding: 14px 28px;
+        color: #F5EFEB;
         font-weight: 600;
         border: 2px solid transparent;
         transition: all 0.3s ease;
@@ -126,45 +143,58 @@ st.markdown("""
     
     /* Aba ativa */
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%);
-        border-color: #1E88E5;
-        box-shadow: 0 4px 12px rgba(30,136,229,0.3);
+        background: linear-gradient(135deg, #597C9D 0%, #6b8eaf 100%);
+        color: #FFFFFF;
+        border-color: #F5EFEB;
+        box-shadow: 0 6px 16px rgba(89,124,157,0.3);
+        transform: scale(1.05);
     }
     
     /* Aba hover */
     .stTabs [data-baseweb="tab"]:hover {
-        background-color: #333;
-        border-color: #1E88E5;
+        background-color: rgba(172,217,230,0.25);
+        border-color: #F5EFEB;
+        transform: translateY(-2px);
     }
     
     /* ==================== BOTÕES ==================== */
     
     /* Botão principal */
     .stButton > button {
-        background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%);
+        background: linear-gradient(135deg, #597C9D 0%, #6b8eaf 100%);
         color: white;
         border: none;
-        border-radius: 8px;
-        padding: 12px 24px;
-        font-weight: 600;
+        border-radius: 10px;
+        padding: 14px 28px;
+        font-weight: 700;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(255,107,0,0.3);
+        box-shadow: 0 4px 16px rgba(89,124,157,0.3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255,107,0,0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(89,124,157,0.4);
+        background: linear-gradient(135deg, #6b8eaf 0%, #597C9D 100%);
     }
     
     /* Botão de download */
     .stDownloadButton > button {
-        background: linear-gradient(135deg, #51CF66 0%, #40c057 100%);
-        color: white;
+        background: linear-gradient(135deg, #2F4156 65%, #2F4156 100%);
+        color: #2F4156;
         border: none;
-        border-radius: 8px;
-        padding: 12px 24px;
-        font-weight: 600;
-        box-shadow: 0 4px 12px rgba(81,207,102,0.3);
+        border-radius: 10px;
+        padding: 14px 28px;
+        font-weight: 700;
+        box-shadow: 0 4px 16px #ACD9E6;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .stDownloadButton > button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(172,217,230,0.4);
     }
     
     /* ==================== INPUTS ==================== */
@@ -173,199 +203,278 @@ st.markdown("""
     .stTextInput > div > div > input,
     .stSelectbox > div > div > div,
     .stMultiSelect > div > div > div {
-        background-color: #262730;
-        color: #ffffff;
-        border: 2px solid #333;
-        border-radius: 8px;
-        transition: border-color 0.3s ease;
+        background-color: #2F4156;
+        color: #2F4156;
+        border: 2px solid #F5EFEB;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-weight: 500;
     }
     
     .stTextInput > div > div > input:focus,
     .stSelectbox > div > div > div:focus {
-        border-color: #1E88E5;
-        box-shadow: 0 0 0 2px rgba(30,136,229,0.2);
+        border-color: #597C9D;
+        box-shadow: 0 0 0 3px rgba(89,124,157,0.2);
+        background-color: #2F4156;
     }
     
-    /* ==================== ALERTAS ==================== */
+    /* ==================== ALERTAS CUSTOMIZÁVEIS ==================== */
     
     .stAlert {
-        border-radius: 10px;
-        border-left: 4px solid #1E88E5;
-        background-color: #1e1e1e;
+        border-radius: 12px;
+        border-left: 5px solid #597C9D;
+        color: #2F4156;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     
-    /* Success */
-    .stSuccess {
-        border-left-color: #51CF66;
-        background-color: rgba(81,207,102,0.1);
+    /* Classes customizadas para alertas */
+    .custom-alert-success {
+        background: linear-gradient(135deg, rgba(76,175,80,0.15) 0%, rgba(76,175,80,0.08) 100%) !important;
+        border-left-color: #4CAF50 !important;
     }
     
-    /* Warning */
-    .stWarning {
-        border-left-color: #FFD43B;
-        background-color: rgba(255,212,59,0.1);
+    .custom-alert-warning {
+        background: linear-gradient(135deg, rgba(255,193,7,0.15) 0%, rgba(255,193,7,0.08) 100%) !important;
+        border-left-color: #FFC107 !important;
     }
     
-    /* Error */
-    .stError {
-        border-left-color: #1E88E5;
-        background-color: rgba(30,136,229,0.1);
+    .custom-alert-error {
+        background: linear-gradient(135deg, rgba(244,67,54,0.15) 0%, rgba(244,67,54,0.08) 100%) !important;
+        border-left-color: #F44336 !important;
     }
     
-    /* Info */
-    .stInfo {
-        border-left-color: #4DABF7;
-        background-color: rgba(77,171,247,0.1);
+    .custom-alert-info {
+        background: linear-gradient(135deg, rgba(172,217,230,0.2) 0%, rgba(172,217,230,0.1) 100%) !important;
+        border-left-color: #ACD9E6 !important;
     }
     
     /* ==================== EXPANDERS ==================== */
     
     div[data-testid="stExpander"] {
-        border: 2px solid #333;
+        border: 2px solid #F5EFEB;
         border-radius: 12px;
-        background-color: #1e1e1e;
-        transition: border-color 0.3s ease;
+        background: linear-gradient(135deg, #F5EFEB 0%, #FFFFFF 100%);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     
     div[data-testid="stExpander"]:hover {
-        border-color: #1E88E5;
+        border-color: #597C9D;
+        box-shadow: 0 6px 20px rgba(89,124,157,0.15);
     }
     
     /* Header do expander */
     div[data-testid="stExpander"] summary {
-        color: #ffffff;
-        font-weight: 600;
-        padding: 16px;
+        color: #2F4156;
+        font-weight: 700;
+        padding: 18px;
     }
     
     /* ==================== DATAFRAMES/TABELAS ==================== */
     
     /* Container da tabela */
     .stDataFrame {
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
     
     /* Header da tabela */
     .stDataFrame thead tr th {
-        background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%);
+        background: linear-gradient(135deg, #597C9D 0%, #6b8eaf 100%);
         color: white !important;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 1.2px;
         border: none;
+        padding: 16px;
     }
     
     /* Linhas da tabela */
     .stDataFrame tbody tr {
-        background-color: #1e1e1e;
-        border-bottom: 1px solid #333;
+        background-color: #F5EFEB;
+        border-bottom: 1px solid #ACD9E6;
         transition: background-color 0.2s ease;
     }
     
+    .stDataFrame tbody tr:nth-child(even) {
+        background-color: #FFFFFF;
+    }
+    
     .stDataFrame tbody tr:hover {
-        background-color: #262730;
+        background-color: rgba(172,217,230,0.2);
     }
     
     /* ==================== SLIDER ==================== */
     
     .stSlider > div > div > div > div {
-        background-color: #1E88E5;
+        background-color: #597C9D;
     }
     
     .stSlider > div > div > div > div > div {
-        background-color: #42A5F5;
+        background-color: #F5EFEB;
     }
     
     /* ==================== FILE UPLOADER ==================== */
     
     .stFileUploader {
-        background-color: #1e1e1e;
-        border: 2px dashed #1E88E5;
-        border-radius: 12px;
-        padding: 20px;
+        background: linear-gradient(135deg, #2F4156 0%, #2F4156 100%);
+        border: 3px dashed #F5EFEB;
+        border-radius: 16px;
+        padding: 28px;
         transition: all 0.3s ease;
-    }
-    
-    .stFileUploader:hover {
-        border-color: #4285F4;
-        background-color: #262730;
     }
     
     /* ==================== SCROLLBAR ==================== */
     
     /* Scrollbar no geral */
     ::-webkit-scrollbar {
-        width: 12px;
-        height: 12px;
+        width: 14px;
+        height: 14px;
     }
     
     ::-webkit-scrollbar-track {
-        background: #1e1e1e;
+        background: #2F4156;
     }
     
     ::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%);
-        border-radius: 6px;
+        background: linear-gradient(135deg, #597C9D 0%, #ACD9E6 100%);
+        border-radius: 8px;
+        border: 2px solid #2F4156;
     }
     
     ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%);
+        background: linear-gradient(135deg, #ACD9E6 0%, #597C9D 100%);
     }
     
     /* ==================== TÍTULOS E TEXTO ==================== */
     
-    h1, h2, h3 {
-        color: #ffffff;
+    h1 {
+        color: #F5EFEB;
+        font-weight: 800;
+        text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    h2, h3 {
+        color: #ACD9E6;
         font-weight: 700;
     }
     
     p, span, div {
-        color: #e0e0e0;
+        color: #F5EFEB;
     }
     
     /* ==================== RADIO BUTTONS ==================== */
     
     .stRadio > div {
-        background-color: #1e1e1e;
-        padding: 10px;
-        border-radius: 8px;
+        background: linear-gradient(135deg, rgba(245,239,235,0.1) 0%, rgba(245,239,235,0.05) 100%);
+        padding: 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(172,217,230,0.3);
+    }
+    
+    .stRadio label {
+        color: #F5EFEB !important;
+        font-weight: 500;
+    }
+    
+    /* ==================== CHECKBOX ==================== */
+    
+    .stCheckbox label {
+        color: #F5EFEB !important;
+        font-weight: 500;
     }
     
     /* ==================== DIVISORES ==================== */
     
     hr {
-        border-color: #1E88E5;
-        opacity: 0.3;
-        margin: 2rem 0;
+        border-color: #F5EFEB;
+        opacity: 0.4;
+        margin: 2.5rem 0;
+    }
+    
+    /* ==================== MULTISELECT ==================== */
+    
+    .stMultiSelect span {
+        background-color: #597C9D !important;
+        color: white !important;
+        border-radius: 6px;
+        padding: 4px 8px;
+    }
+    
+    /* ==================== DATE INPUT ==================== */
+    
+    .stDateInput > div > div > input {
+        background-color: rgba(245,239,235,0.9);
+        color: #2F4156;
+        border: 2px solid #F5EFEB;
+        border-radius: 10px;
+        font-weight: 500;
+    }
+    
+    .stDateInput > div > div > input:focus {
+        border-color: #F5EFEB;
+        box-shadow: 0 0 0 3px rgba(89,124,157,0.2);
+    }
+    
+    /* ==================== SPINNER ==================== */
+    
+    .stSpinner > div {
+        border-top-color: #F5EFEB !important;
     }
     
     /* ==================== ANIMAÇÕES ==================== */
     
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(30px); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
     }
     
     .stMetric {
-        animation: fadeIn 0.5s ease-out;
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    /* ==================== SOMBRAS SUAVES ==================== */
+    
+    .element-container {
+        animation: fadeInUp 0.5s ease-out;
     }
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 style='text-align: center; color: #1E88E5;'>💳 Dashboard Financeiro Avançado</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #888; font-size: 1.1rem;'>Análise completa e inteligente do seu extrato Banco Inter</p>", unsafe_allow_html=True)
-st.markdown("---")
+# Inicializar session state
+if 'dados_carregados' not in st.session_state:
+    st.session_state.dados_carregados = False
 
-# Upload do arquivo
-arquivo = st.file_uploader(
-    "📎 Anexe seu extrato do Banco Inter (.csv)",
-    type="csv",
-    help="Faça o download do extrato em CSV diretamente do app do Banco Inter"
-)
+# Mostrar logo e upload apenas se dados não foram carregados
+if not st.session_state.dados_carregados:
+    st.markdown("<h1 style='text-align: center; color: #F5EFEB;'>💡 Lumen</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #ACD9E6; font-size: 1.1rem;'>Iluminando suas finanças com inteligência</p>", unsafe_allow_html=True)
+    st.markdown("---")
 
-if arquivo:
+    # Upload do arquivo com estilo melhorado
+    st.markdown("""
+    <div style='max-width: 800px; margin: 0 auto;'>
+    """, unsafe_allow_html=True)
+
+    arquivo = st.file_uploader(
+        "Anexe seu extrato do Banco Inter (.csv)",
+        type="csv",
+        help="Faça o download do extrato em CSV diretamente do app do Banco Inter",
+        label_visibility="visible"
+    )
+
+    st.markdown("</div>", unsafe_allow_html=True)
+else:
+    arquivo = st.session_state.arquivo
+
+if arquivo and not st.session_state.dados_carregados:
     # Carregamento e processamento
     with st.spinner("🔄 Processando extrato..."):
         df = load_csv(arquivo)
@@ -373,17 +482,36 @@ if arquivo:
         
         # Aplicar categorização automática
         df['categoria'] = df['descricao'].apply(categorizar_transacao)
+        
+        # Salvar no session state
+        st.session_state.df = df
+        st.session_state.arquivo = arquivo
+        st.session_state.dados_carregados = True
+        st.rerun()
+
+if st.session_state.dados_carregados:
+    df = st.session_state.df
     
-    st.success("✅ Extrato carregado e categorizado com sucesso!")
+    st.success("Extrato carregado e categorizado com sucesso!")
     
     # Sidebar com filtros
-    st.sidebar.header("🔍 Filtros")
+    st.sidebar.header("Filtros")
+    
+    # Botão de Novo Upload na sidebar
+    st.sidebar.markdown("---")
+    if st.sidebar.button("Novo Upload", use_container_width=True):
+        st.session_state.dados_carregados = False
+        st.session_state.df = None
+        st.session_state.arquivo = None
+        st.rerun()
+    
+    st.sidebar.markdown("---")
     
     # Filtro de data no formato brasileiro
     data_min = df['data'].min().date()
     data_max = df['data'].max().date()
     
-    st.sidebar.markdown("**📅 Período de Análise**")
+    st.sidebar.markdown("**Período de Análise**")
     
     col_data1, col_data2 = st.sidebar.columns(2)
     
@@ -438,13 +566,13 @@ if arquivo:
     metricas = calcular_metricas_avancadas(df_filtrado)
     
     # KPIs Principais
-    st.header("📊 Visão Geral")
+    st.header("Visão Geral")
     
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
         st.metric(
-            "💸 Total de Gastos",
+            "Total de Gastos",
             f"R$ {metricas['total_gastos']:,.2f}",
             delta=f"{metricas['variacao_gastos']:.1f}% vs período anterior",
             delta_color="inverse"
@@ -452,7 +580,7 @@ if arquivo:
     
     with col2:
         st.metric(
-            "💰 Total de Entradas",
+            "Total de Entradas",
             f"R$ {metricas['total_entradas']:,.2f}",
             delta=f"{metricas['variacao_entradas']:.1f}% vs período anterior"
         )
@@ -460,7 +588,7 @@ if arquivo:
     with col3:
         saldo_liquido = metricas['total_entradas'] - metricas['total_gastos']
         st.metric(
-            "📈 Saldo Líquido",
+            "Saldo Líquido",
             f"R$ {saldo_liquido:,.2f}",
             delta="Positivo" if saldo_liquido > 0 else "Negativo",
             delta_color="normal" if saldo_liquido > 0 else "inverse"
@@ -468,7 +596,7 @@ if arquivo:
     
     with col4:
         st.metric(
-            "🔢 Transações",
+            "Transações",
             f"{len(df_filtrado)}",
             delta=f"Média: R$ {metricas['ticket_medio']:.2f}"
         )
@@ -478,29 +606,27 @@ if arquivo:
     
     with col5:
         st.metric(
-            "📅 Gasto Médio Diário",
+            "Gasto Médio Diário",
             f"R$ {metricas['gasto_medio_diario']:.2f}"
         )
     
     with col6:
         st.metric(
-            "🏆 Maior Gasto",
+            "Maior Gasto",
             f"R$ {metricas['maior_gasto']:.2f}"
         )
     
     with col7:
         st.metric(
-            "📊 Categoria Top",
+            "Categoria Top",
             metricas['categoria_top']
         )
     
     with col8:
         taxa_poupanca = (saldo_liquido / metricas['total_entradas'] * 100) if metricas['total_entradas'] > 0 else 0
         st.metric(
-            "💎 Taxa de Poupança",
-            f"{taxa_poupanca:.1f}%",
-            delta="Saudável" if taxa_poupanca > 20 else "Atenção",
-            delta_color="normal" if taxa_poupanca > 20 else "inverse"
+            "Taxa de Poupança",
+            f"{taxa_poupanca:.1f}%"
         )
     
     st.divider()
@@ -515,7 +641,7 @@ if arquivo:
     ])
     
     with tab1:
-        st.subheader("📈 Análise de Tendências Temporais")
+        st.subheader("Análise de Tendências Temporais")
         
         col_t1, col_t2 = st.columns(2)
         
@@ -541,8 +667,8 @@ if arquivo:
             )
             fig_mensal.update_layout(
                 hovermode='x unified',
-                plot_bgcolor='#1e1e1e',
-                paper_bgcolor='#1e1e1e',
+                plot_bgcolor='#2F4156',
+                paper_bgcolor='#2F4156',
                 font=dict(color='#ffffff'),
                 height=350,
                 xaxis=dict(gridcolor='#333'),
@@ -583,8 +709,8 @@ if arquivo:
             fig_comp.update_layout(
                 barmode='group',
                 hovermode='x unified',
-                plot_bgcolor='#1e1e1e',
-                paper_bgcolor='#1e1e1e',
+                plot_bgcolor='#2F4156',
+                paper_bgcolor='#2F4156',
                 font=dict(color='#ffffff'),
                 height=350,
                 legend=dict(orientation="h", yanchor="bottom", y=1.02),
@@ -607,8 +733,8 @@ if arquivo:
         fig_saldo.add_hline(y=0, line_dash="dash", line_color="red", opacity=0.5)
         fig_saldo.update_layout(
             hovermode='x unified',
-            plot_bgcolor='#1e1e1e',
-            paper_bgcolor='#1e1e1e',
+            plot_bgcolor='#2F4156',
+            paper_bgcolor='#2F4156',
             font=dict(color='#ffffff'),
             height=300,
             xaxis=dict(gridcolor='#333'),
@@ -617,7 +743,7 @@ if arquivo:
         st.plotly_chart(fig_saldo, use_container_width=True)
     
     with tab2:
-        st.subheader("🎯 Análise por Categorias")
+        st.subheader("Análise por Categorias")
         
         col_c1, col_c2 = st.columns([1, 1])
         
@@ -640,7 +766,7 @@ if arquivo:
             )
             fig_pizza.update_layout(
                 height=400,
-                paper_bgcolor='#1e1e1e',
+                paper_bgcolor='#1c1c24',
                 font=dict(color='#ffffff'),
                 showlegend=True,
                 legend=dict(font=dict(color='#ffffff'))
@@ -664,46 +790,46 @@ if arquivo:
                 marker_color='#4DABF7'
             )
             fig_cat.update_layout(
-                plot_bgcolor='#1e1e1e',
-                paper_bgcolor='#1e1e1e',
+                plot_bgcolor='#1c1c24',
+                paper_bgcolor='#1c1c24',
                 font=dict(color='#ffffff'),
                 height=400,
                 xaxis_title="Valor Gasto (R$)",
                 yaxis_title="",
                 xaxis=dict(gridcolor='#333'),
                 yaxis=dict(gridcolor='#333')
-            )
+                )
             st.plotly_chart(fig_cat, use_container_width=True)
-        
-        # Tabela detalhada por categoria
-        st.markdown("**Detalhamento por Categoria**")
-        
-        df_cat_detalhado = (
-            df_filtrado[df_filtrado['valor'] < 0]
-            .groupby('categoria')
-            .agg({
-                'valor': ['sum', 'count', 'mean'],
-            })
-            .round(2)
-        )
-        df_cat_detalhado.columns = ['Total Gasto', 'Nº Transações', 'Ticket Médio']
-        df_cat_detalhado['Total Gasto'] = df_cat_detalhado['Total Gasto'].abs()
-        df_cat_detalhado['Ticket Médio'] = df_cat_detalhado['Ticket Médio'].abs()
-        df_cat_detalhado['% do Total'] = (df_cat_detalhado['Total Gasto'] / df_cat_detalhado['Total Gasto'].sum() * 100).round(1)
-        df_cat_detalhado = df_cat_detalhado.sort_values('Total Gasto', ascending=False)
-        
-        st.dataframe(
-            df_cat_detalhado.style.format({
-                'Total Gasto': 'R$ {:,.2f}',
-                'Nº Transações': '{:.0f}',
-                'Ticket Médio': 'R$ {:,.2f}',
-                '% do Total': '{:.1f}%'
-            }),
-            use_container_width=True
-        )
+
+            # Tabela detalhada por categoria
+    st.markdown("**Detalhamento por Categoria**")
     
+    df_cat_detalhado = (
+        df_filtrado[df_filtrado['valor'] < 0]
+        .groupby('categoria')
+        .agg({
+            'valor': ['sum', 'count', 'mean'],
+        })
+        .round(2)
+    )
+    df_cat_detalhado.columns = ['Total Gasto', 'Nº Transações', 'Ticket Médio']
+    df_cat_detalhado['Total Gasto'] = df_cat_detalhado['Total Gasto'].abs()
+    df_cat_detalhado['Ticket Médio'] = df_cat_detalhado['Ticket Médio'].abs()
+    df_cat_detalhado['% do Total'] = (df_cat_detalhado['Total Gasto'] / df_cat_detalhado['Total Gasto'].sum() * 100).round(1)
+    df_cat_detalhado = df_cat_detalhado.sort_values('Total Gasto', ascending=False)
+    
+    st.dataframe(
+        df_cat_detalhado.style.format({
+            'Total Gasto': 'R$ {:,.2f}',
+            'Nº Transações': '{:.0f}',
+            'Ticket Médio': 'R$ {:,.2f}',
+            '% do Total': '{:.1f}%'
+        }),
+        use_container_width=True
+    )
+
     with tab3:
-        st.subheader("🔄 Gastos Recorrentes e Padrões")
+        st.subheader("Gastos Recorrentes e Padrões")
         
         recorrentes = identificar_gastos_recorrentes(df_filtrado)
         
@@ -725,8 +851,8 @@ if arquivo:
                 textposition='outside'
             )
             fig_rec.update_layout(
-                plot_bgcolor='#1e1e1e',
-                paper_bgcolor='#1e1e1e',
+                plot_bgcolor='#2F4156',
+                paper_bgcolor='#2F4156',
                 font=dict(color='#ffffff'),
                 height=400,
                 xaxis_title="Total Gasto (R$)",
@@ -755,7 +881,7 @@ if arquivo:
             st.info("Nenhum gasto recorrente identificado no período selecionado.")
         
         # Top 10 maiores gastos individuais
-        st.markdown("**🏆 Top 10 Maiores Gastos Individuais**")
+        st.markdown("**Top 10 Maiores Gastos Individuais**")
         top_gastos = (
             df_filtrado[df_filtrado['valor'] < 0]
             .nlargest(10, 'valor', keep='first')[['data', 'descricao', 'categoria', 'valor']]
@@ -770,24 +896,30 @@ if arquivo:
             }),
             use_container_width=True
         )
-    
+
     with tab4:
-        st.subheader("💡 Insights e Recomendações")
+        st.subheader("Insights e Recomendações")
         
         insights = analisar_tendencias(df_filtrado)
         
-        # Cards de insights
+        # Cards de insights com cores customizáveis
         col_i1, col_i2 = st.columns(2)
         
         with col_i1:
-            st.markdown("### 📊 Análise de Comportamento")
+            st.markdown("### Análise de Comportamento")
             
             if insights['tendencia_gastos'] == 'crescente':
-                st.warning(f"⚠️ Seus gastos estão **crescendo** {insights['variacao_percentual']:.1f}% em relação ao período anterior.")
+                st.markdown(f"""<div class="custom-alert-warning" style="padding: 20px; border-radius: 12px; border-left: 5px solid #FFC107; margin-bottom: 15px;">
+                    Seus gastos estão <strong>crescendo</strong> {insights['variacao_percentual']:.1f}% em relação ao período anterior.
+                </div>""", unsafe_allow_html=True)
             elif insights['tendencia_gastos'] == 'decrescente':
-                st.success(f"✅ Parabéns! Seus gastos estão **diminuindo** {abs(insights['variacao_percentual']):.1f}% em relação ao período anterior.")
+                st.markdown(f"""<div class="custom-alert-success" style="padding: 20px; border-radius: 12px; border-left: 5px solid #4CAF50; margin-bottom: 15px;">
+                    Parabéns! Seus gastos estão <strong>diminuindo</strong> {abs(insights['variacao_percentual']):.1f}% em relação ao período anterior.
+                </div>""", unsafe_allow_html=True)
             else:
-                st.info("📊 Seus gastos estão **estáveis** em relação ao período anterior.")
+                st.markdown(f"""<div class="custom-alert-info" style="padding: 20px; border-radius: 12px; border-left: 5px solid #ACD9E6; margin-bottom: 15px;">
+                    Seus gastos estão <strong>estáveis</strong> em relação ao período anterior.
+                </div>""", unsafe_allow_html=True)
             
             # Análise de sazonalidade
             dias_semana = df_filtrado[df_filtrado['valor'] < 0].copy()
@@ -811,30 +943,42 @@ if arquivo:
 
             if not gastos_por_dia.empty:
                 dia_mais_gasto = gastos_por_dia.idxmax()
-                st.info(f"📅 Você tende a gastar mais às **{dia_mais_gasto}s**")
+                st.markdown(f"""<div class="custom-alert-info" style="padding: 20px; border-radius: 12px; border-left: 5px solid #ACD9E6; margin-bottom: 15px;">
+                    Você tende a gastar mais às <strong>{dia_mais_gasto}s</strong>
+                </div>""", unsafe_allow_html=True)
         
         with col_i2:
-            st.markdown("### 🎯 Recomendações")
+            st.markdown("### Recomendações")
             
             # Recomendações baseadas em análise
             if taxa_poupanca < 10:
-                st.error("🚨 Sua taxa de poupança está abaixo de 10%. Considere reduzir gastos ou aumentar receitas.")
+                st.markdown(f"""<div class="custom-alert-error" style="padding: 20px; border-radius: 12px; border-left: 5px solid #F44336; margin-bottom: 15px;">
+                    Sua taxa de poupança está abaixo de 10%. Considere reduzir gastos ou aumentar receitas.
+                </div>""", unsafe_allow_html=True)
             elif taxa_poupanca < 20:
-                st.warning("⚠️ Tente aumentar sua taxa de poupança para pelo menos 20% da renda.")
+                st.markdown(f"""<div class="custom-alert-warning" style="padding: 20px; border-radius: 12px; border-left: 5px solid #FFC107; margin-bottom: 15px;">
+                    Tente aumentar sua taxa de poupança para pelo menos 20% da renda.
+                </div>""", unsafe_allow_html=True)
             else:
-                st.success("✅ Excelente! Você está poupando uma boa parte da renda.")
+                st.markdown(f"""<div class="custom-alert-success" style="padding: 20px; border-radius: 12px; border-left: 5px solid #4CAF50; margin-bottom: 15px;">
+                    Excelente! Você está poupando uma boa parte da renda.
+                </div>""", unsafe_allow_html=True)
             
             # Sugestões de economia
             if not categorias.empty:
                 cat_top = categorias.nlargest(1, 'valor').iloc[0]
-                st.info(f"💡 Considere reduzir gastos em **{cat_top['categoria']}** (R$ {cat_top['valor']:.2f})")
+                st.markdown(f"""<div class="custom-alert-info" style="padding: 20px; border-radius: 12px; border-left: 5px solid #ACD9E6; margin-bottom: 15px;">
+                    Considere reduzir gastos em <strong>{cat_top['categoria']}</strong> (R$ {cat_top['valor']:.2f})
+                </div>""", unsafe_allow_html=True)
             
             # Alerta de gastos altos
             if metricas['maior_gasto'] > metricas['ticket_medio'] * 5:
-                st.warning(f"⚠️ Você teve um gasto muito alto de R$ {metricas['maior_gasto']:.2f}. Revise se foi necessário.")
+                st.markdown(f"""<div class="custom-alert-warning" style="padding: 20px; border-radius: 12px; border-left: 5px solid #FFC107; margin-bottom: 15px;">
+                    Você teve um gasto muito alto de R$ {metricas['maior_gasto']:.2f}. Revise se foi necessário.
+                </div>""", unsafe_allow_html=True)
         
         # Gráfico de evolução da taxa de poupança
-        st.markdown("### 📈 Evolução da Taxa de Poupança")
+        st.markdown("### Evolução da Taxa de Poupança")
         
         df_mensal_completo = df_filtrado.groupby('mes_ano').agg({
             'valor': lambda x: x[x < 0].sum()
@@ -861,11 +1005,11 @@ if arquivo:
             fillcolor='rgba(81, 207, 102, 0.2)'
         ))
         fig_poup.add_hline(y=20, line_dash="dash", line_color="green", 
-                          annotation_text="Meta: 20%", annotation_position="right")
+                        annotation_text="Meta: 20%", annotation_position="right")
         fig_poup.update_layout(
             hovermode='x unified',
-            plot_bgcolor='#1e1e1e',
-            paper_bgcolor='#1e1e1e',
+            plot_bgcolor='#2F4156',
+            paper_bgcolor='#2F4156',
             font=dict(color='#ffffff'),
             height=300,
             yaxis_title="Taxa de Poupança (%)",
@@ -874,9 +1018,9 @@ if arquivo:
             yaxis=dict(gridcolor='#333')
         )
         st.plotly_chart(fig_poup, use_container_width=True)
-    
+
     with tab5:
-        st.subheader("📋 Detalhes das Transações")
+        st.subheader("Detalhes das Transações")
         
         # Filtros adicionais
         col_f1, col_f2, col_f3 = st.columns(3)
@@ -888,7 +1032,7 @@ if arquivo:
             )
         
         with col_f2:
-            busca = st.text_input("🔍 Buscar na descrição", "")
+            busca = st.text_input("Buscar na descrição", "")
         
         with col_f3:
             linhas = st.slider("Linhas a exibir", 10, 100, 50)
@@ -930,59 +1074,22 @@ if arquivo:
         # Botão de download
         csv = df_display.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label="📥 Baixar dados filtrados (CSV)",
+            label="Baixar dados filtrados (CSV)",
             data=csv,
             file_name=f"extrato_filtrado_{datetime.now().strftime('%Y%m%d')}.csv",
             mime="text/csv"
         )
-    
+
     st.divider()
-    
+
     # Rodapé com informações
     col_f1, col_f2, col_f3 = st.columns(3)
-    
+
     with col_f1:
         st.info(f"📅 **Período analisado:** {(df_filtrado['data'].max() - df_filtrado['data'].min()).days} dias")
-    
+
     with col_f2:
         st.info(f"🔢 **Total de transações:** {len(df_filtrado)}")
-    
+
     with col_f3:
         st.info(f"📊 **Categorias identificadas:** {df_filtrado['categoria'].nunique()}")
-
-else:
-    st.info("⬆️ Faça upload do seu extrato do Banco Inter para começar a análise completa!")
-    
-    # Instruções
-    with st.expander("📖 Como usar este dashboard"):
-        st.markdown("""
-        ### Passo a passo:
-        
-        1. **Baixe seu extrato** do app do Banco Inter em formato CSV
-        2. **Faça upload** do arquivo usando o botão acima
-        3. **Explore** as diferentes abas de análise:
-           - **Tendências**: Veja a evolução dos seus gastos ao longo do tempo
-           - **Categorias**: Descubra onde você mais gasta
-           - **Recorrências**: Identifique gastos que se repetem
-           - **Insights**: Receba recomendações personalizadas
-           - **Detalhes**: Veja todas as transações com filtros avançados
-        
-        ### Recursos:
-        - 🤖 **Categorização automática** de transações
-        - 📊 **Gráficos interativos** com Plotly
-        - 🔍 **Filtros avançados** por data, categoria e tipo
-        - 💡 **Insights inteligentes** sobre seus hábitos financeiros
-        - 📥 **Exportação** de dados filtrados
-        """)
-    
-    with st.expander("🎯 Funcionalidades principais"):
-        st.markdown("""
-        - ✅ **Análise temporal completa** (mensal, semestral, anual)
-        - ✅ **Identificação de gastos recorrentes**
-        - ✅ **Cálculo de taxa de poupança**
-        - ✅ **Comparação entre períodos**
-        - ✅ **Top 10 maiores gastos**
-        - ✅ **Análise por categoria com gráficos**
-        - ✅ **Alertas e recomendações personalizadas**
-        - ✅ **Interface moderna e responsiva**
-        """)
