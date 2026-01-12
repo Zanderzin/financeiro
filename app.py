@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -85,7 +86,7 @@ st.markdown("""
         padding: 24px;
         border-radius: 16px;
         box-shadow: 0 8px 24px rgba(47,65,86,0.15);
-        border: 2px solid #F5EFEB;
+        border: 2px solid #0E1117;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
@@ -93,7 +94,7 @@ st.markdown("""
     .stMetric:hover {
         transform: translateY(-8px);
         box-shadow: 0 16px 32px rgba(89,124,157,0.25);
-        border-color: #597C9D;
+        border-color: #F5EFEB;
     }
     
     /* Label das métricas */
@@ -143,7 +144,7 @@ st.markdown("""
     
     /* Aba ativa */
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #597C9D 0%, #6b8eaf 100%);
+        background: linear-gradient(135deg, #0E1117 100%, #0E1117 100%);
         color: #FFFFFF;
         border-color: #F5EFEB;
         box-shadow: 0 6px 16px rgba(89,124,157,0.3);
@@ -161,7 +162,7 @@ st.markdown("""
     
     /* Botão principal */
     .stButton > button {
-        background: linear-gradient(135deg, #597C9D 0%, #6b8eaf 100%);
+        background: linear-gradient(135deg, #0E1117 0%, #0E1117 100%);
         color: white;
         border: none;
         border-radius: 10px;
@@ -176,7 +177,7 @@ st.markdown("""
     .stButton > button:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 24px rgba(89,124,157,0.4);
-        background: linear-gradient(135deg, #6b8eaf 0%, #597C9D 100%);
+        background: linear-gradient(135deg, #0E1117 0%, #597C9D 100%);
     }
     
     /* Botão de download */
@@ -187,7 +188,7 @@ st.markdown("""
         border-radius: 10px;
         padding: 14px 28px;
         font-weight: 700;
-        box-shadow: 0 4px 16px #ACD9E6;
+        box-shadow: 0 4px 16px #0E1117;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
@@ -203,9 +204,9 @@ st.markdown("""
     .stTextInput > div > div > input,
     .stSelectbox > div > div > div,
     .stMultiSelect > div > div > div {
-        background-color: #2F4156;
+        background: linear-gradient(135deg, rgba(245,239,235,0.1) 0%, rgba(245,239,235,0.05) 100%);
         color: #2F4156;
-        border: 2px solid #F5EFEB;
+        border: 2px solid #1d2835;
         border-radius: 10px;
         transition: all 0.3s ease;
         font-weight: 500;
@@ -370,7 +371,7 @@ st.markdown("""
         background: linear-gradient(135deg, rgba(245,239,235,0.1) 0%, rgba(245,239,235,0.05) 100%);
         padding: 14px;
         border-radius: 10px;
-        border: 1px solid rgba(172,217,230,0.3);
+        border: 1px solid #1d2835;
     }
     
     .stRadio label {
@@ -396,7 +397,7 @@ st.markdown("""
     /* ==================== MULTISELECT ==================== */
     
     .stMultiSelect span {
-        background-color: #597C9D !important;
+        background-color: #0E1117 !important;
         color: white !important;
         border-radius: 6px;
         padding: 4px 8px;
@@ -407,7 +408,7 @@ st.markdown("""
     .stDateInput > div > div > input {
         background-color: rgba(245,239,235,0.9);
         color: #2F4156;
-        border: 2px solid #F5EFEB;
+        border: 2px solid #1d2835;
         border-radius: 10px;
         font-weight: 500;
     }
@@ -454,20 +455,111 @@ if 'dados_carregados' not in st.session_state:
 
 # Mostrar logo e upload apenas se dados não foram carregados
 if not st.session_state.dados_carregados:
-    st.markdown("<h1 style='text-align: center; color: #F5EFEB;'>💡 Lumen</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #F5EFEB;'>Lumen</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #ACD9E6; font-size: 1.1rem;'>Iluminando suas finanças com inteligência</p>", unsafe_allow_html=True)
     st.markdown("---")
 
     # Upload do arquivo com estilo melhorado
-    st.markdown("""
-    <div style='max-width: 800px; margin: 0 auto;'>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <style>
+        /* Seleciona o botão do file_uploader */
+        [data-testid="stFileUploader"] button {
+            /* tamanho do botão */
+            min-width: 200px;        /* aumente conforme necessário (ex.: 240, 280) */
+            height: 64px;            /* altura do botão */
+            padding: 0 16px;         /* espaçamento horizontal interno */
+            border-radius: 10px;     /* cantos arredondados */
+            font-size: 16px;         /* tamanho da fonte (mesmo se o texto estiver transparente) */
+            line-height: 44px;       /* ajuda a centralizar verticalmente quando não usamos flex */
+        }
+
+        /* Como usamos ::after para o texto customizado, precisamos garantir o alinhamento */
+        [data-testid="stFileUploader"] button::after {
+            font-size: 16px;         /* mantenha consistente com o botão */
+        }
+
+        /* Opcional: se quiser “esticar” o botão para ocupar a largura toda do container */
+        .btn-upload-full [data-testid="stFileUploader"] button {
+            width: 100%;
+            justify-content: center;  /* caso o texto original apareça em algum tema */
+        }
+
+        /* (Se notar o texto do ::after um pouco “deslocado” no vertical em alguns temas) */
+        [data-testid="stFileUploader"] button {
+            position: relative;
+            display: inline-flex;     /* garante centralização nota 10 */
+            align-items: center;
+            justify-content: center;
+        }
+        [data-testid="stFileUploader"] button::after {
+            position: absolute;
+            inset: 0;                 /* ocupa toda a área do botão */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        /* 1) Esconde instruções internas do dropzone */
+        [data-testid="stFileUploaderDropzoneInstructions"] {
+            display: none !important;
+        }
+
+        /* 2) (Opcional) Esconde o aviso de limite/tipo de arquivo, caso não queira exibir */
+        [data-testid="stFileUploaderFileSizeLimit"],
+        [data-testid="stFileUploaderType"] {
+            display: none !important;
+        }
+
+        /* 3) Estiliza a área do dropzone para combinar com tema escuro */
+        [data-testid="stFileUploaderDropzone"] {
+            background: #597C9D !important;  /* cinza escuro */
+            height: 100px;
+            border-radius: 12px !important;
+        }
+
+        /* 4) Troca o texto do botão "Browse files" por "Selecionar arquivo" */
+        [data-testid="stFileUploader"] button {
+            position: relative !important;
+            color: transparent !important;        /* esconde o texto original */
+        }
+        [data-testid="stFileUploader"] button::after {
+            content: "Selecionar arquivo";        /* seu texto aqui */
+            position: absolute;
+            inset: 0;                             /* top/right/bottom/left = 0 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e2e8f0;                       /* texto claro */
+            font-weight: 600;
+            pointer-events: none;                 /* não bloquear clique */
+        }
+
+        /* 5) (Opcional) Ajustes de visual do botão */
+        [data-testid="stFileUploader"] button {
+            background-color: #0E1117 !important; /* azul */
+            border-color: #0E1117 !important;
+        }
+
+        /* 6) (Opcional) Tira o label duplicado dentro do dropzone para ficar limpinho */
+        [data-testid="stFileUploader"] label > div:first-child {
+            display: none !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+    st.subheader("Anexe seu extrato do Banco Inter")
+    st.caption("Arraste e solte o arquivo aqui ou clique no botão para selecionar o CSV.")
 
     arquivo = st.file_uploader(
         "Anexe seu extrato do Banco Inter (.csv)",
         type="csv",
         help="Faça o download do extrato em CSV diretamente do app do Banco Inter",
-        label_visibility="visible"
+        label_visibility="collapsed"
     )
 
     st.markdown("</div>", unsafe_allow_html=True)
@@ -667,8 +759,8 @@ if st.session_state.dados_carregados:
             )
             fig_mensal.update_layout(
                 hovermode='x unified',
-                plot_bgcolor='#2F4156',
-                paper_bgcolor='#2F4156',
+                plot_bgcolor='#0E1117',
+                paper_bgcolor='#0E1117',
                 font=dict(color='#ffffff'),
                 height=350,
                 xaxis=dict(gridcolor='#333'),
@@ -709,8 +801,8 @@ if st.session_state.dados_carregados:
             fig_comp.update_layout(
                 barmode='group',
                 hovermode='x unified',
-                plot_bgcolor='#2F4156',
-                paper_bgcolor='#2F4156',
+                plot_bgcolor='#0E1117',
+                paper_bgcolor='#0E1117',
                 font=dict(color='#ffffff'),
                 height=350,
                 legend=dict(orientation="h", yanchor="bottom", y=1.02),
@@ -733,8 +825,8 @@ if st.session_state.dados_carregados:
         fig_saldo.add_hline(y=0, line_dash="dash", line_color="red", opacity=0.5)
         fig_saldo.update_layout(
             hovermode='x unified',
-            plot_bgcolor='#2F4156',
-            paper_bgcolor='#2F4156',
+            plot_bgcolor='#0E1117',
+            paper_bgcolor='#0E1117',
             font=dict(color='#ffffff'),
             height=300,
             xaxis=dict(gridcolor='#333'),
@@ -766,7 +858,7 @@ if st.session_state.dados_carregados:
             )
             fig_pizza.update_layout(
                 height=400,
-                paper_bgcolor='#1c1c24',
+                paper_bgcolor='#0E1117',
                 font=dict(color='#ffffff'),
                 showlegend=True,
                 legend=dict(font=dict(color='#ffffff'))
@@ -790,8 +882,8 @@ if st.session_state.dados_carregados:
                 marker_color='#4DABF7'
             )
             fig_cat.update_layout(
-                plot_bgcolor='#1c1c24',
-                paper_bgcolor='#1c1c24',
+                plot_bgcolor='#0E1117',
+                paper_bgcolor='#0E1117',
                 font=dict(color='#ffffff'),
                 height=400,
                 xaxis_title="Valor Gasto (R$)",
@@ -802,31 +894,31 @@ if st.session_state.dados_carregados:
             st.plotly_chart(fig_cat, use_container_width=True)
 
             # Tabela detalhada por categoria
-    st.markdown("**Detalhamento por Categoria**")
-    
-    df_cat_detalhado = (
-        df_filtrado[df_filtrado['valor'] < 0]
-        .groupby('categoria')
-        .agg({
-            'valor': ['sum', 'count', 'mean'],
-        })
-        .round(2)
-    )
-    df_cat_detalhado.columns = ['Total Gasto', 'Nº Transações', 'Ticket Médio']
-    df_cat_detalhado['Total Gasto'] = df_cat_detalhado['Total Gasto'].abs()
-    df_cat_detalhado['Ticket Médio'] = df_cat_detalhado['Ticket Médio'].abs()
-    df_cat_detalhado['% do Total'] = (df_cat_detalhado['Total Gasto'] / df_cat_detalhado['Total Gasto'].sum() * 100).round(1)
-    df_cat_detalhado = df_cat_detalhado.sort_values('Total Gasto', ascending=False)
-    
-    st.dataframe(
-        df_cat_detalhado.style.format({
-            'Total Gasto': 'R$ {:,.2f}',
-            'Nº Transações': '{:.0f}',
-            'Ticket Médio': 'R$ {:,.2f}',
-            '% do Total': '{:.1f}%'
-        }),
-        use_container_width=True
-    )
+        st.markdown("**Detalhamento por Categoria**")
+        
+        df_cat_detalhado = (
+            df_filtrado[df_filtrado['valor'] < 0]
+            .groupby('categoria')
+            .agg({
+                'valor': ['sum', 'count', 'mean'],
+            })
+            .round(2)
+        )
+        df_cat_detalhado.columns = ['Total Gasto', 'Nº Transações', 'Ticket Médio']
+        df_cat_detalhado['Total Gasto'] = df_cat_detalhado['Total Gasto'].abs()
+        df_cat_detalhado['Ticket Médio'] = df_cat_detalhado['Ticket Médio'].abs()
+        df_cat_detalhado['% do Total'] = (df_cat_detalhado['Total Gasto'] / df_cat_detalhado['Total Gasto'].sum() * 100).round(1)
+        df_cat_detalhado = df_cat_detalhado.sort_values('Total Gasto', ascending=False)
+        
+        st.dataframe(
+            df_cat_detalhado.style.format({
+                'Total Gasto': 'R$ {:,.2f}',
+                'Nº Transações': '{:.0f}',
+                'Ticket Médio': 'R$ {:,.2f}',
+                '% do Total': '{:.1f}%'
+            }),
+            use_container_width=True
+        )
 
     with tab3:
         st.subheader("Gastos Recorrentes e Padrões")
@@ -851,8 +943,8 @@ if st.session_state.dados_carregados:
                 textposition='outside'
             )
             fig_rec.update_layout(
-                plot_bgcolor='#2F4156',
-                paper_bgcolor='#2F4156',
+                plot_bgcolor='#0E1117',
+                paper_bgcolor='#0E1117',
                 font=dict(color='#ffffff'),
                 height=400,
                 xaxis_title="Total Gasto (R$)",
@@ -1008,8 +1100,8 @@ if st.session_state.dados_carregados:
                         annotation_text="Meta: 20%", annotation_position="right")
         fig_poup.update_layout(
             hovermode='x unified',
-            plot_bgcolor='#2F4156',
-            paper_bgcolor='#2F4156',
+            plot_bgcolor='#0E1117',
+            paper_bgcolor='#0E1117',
             font=dict(color='#ffffff'),
             height=300,
             yaxis_title="Taxa de Poupança (%)",
