@@ -164,7 +164,6 @@ st.markdown("""
     .stButton > button {
         background: linear-gradient(135deg, #0E1117 0%, #0E1117 100%);
         color: white;
-        border: none;
         border-radius: 10px;
         padding: 14px 28px;
         font-weight: 700;
@@ -177,7 +176,8 @@ st.markdown("""
     .stButton > button:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 24px rgba(89,124,157,0.4);
-        background: linear-gradient(135deg, #0E1117 0%, #597C9D 100%);
+        border-color: #F5EFEB;
+        background: linear-gradient(135deg, #0E1117 0%, #0E1117 100%);
     }
     
     /* Botão de download */
@@ -206,7 +206,7 @@ st.markdown("""
     .stMultiSelect > div > div > div {
         background: linear-gradient(135deg, rgba(245,239,235,0.1) 0%, rgba(245,239,235,0.05) 100%);
         color: #2F4156;
-        border: 2px solid #1d2835;
+        border: 2px solid #2F4156;
         border-radius: 10px;
         transition: all 0.3s ease;
         font-weight: 500;
@@ -371,7 +371,6 @@ st.markdown("""
         background: linear-gradient(135deg, rgba(245,239,235,0.1) 0%, rgba(245,239,235,0.05) 100%);
         padding: 14px;
         border-radius: 10px;
-        border: 1px solid #1d2835;
     }
     
     .stRadio label {
