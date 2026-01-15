@@ -16,7 +16,7 @@ def themed_css() -> str:
         
         /* Fundo principal do app */
         .stApp {
-            background-image: #2F4156;
+            background-color: #0E1117;
         }
         /* ==================== SIDEBAR (BARRA LATERAL) ==================== */
         
@@ -156,7 +156,6 @@ def themed_css() -> str:
         .stDownloadButton > button {
             background: linear-gradient(135deg, #2F4156 65%, #2F4156 100%);
             color: #2F4156;
-            border: none;
             border-radius: 10px;
             padding: 14px 28px;
             font-weight: 700;
@@ -167,6 +166,7 @@ def themed_css() -> str:
         
         .stDownloadButton > button:hover {
             transform: translateY(-3px);
+            border-color: #F5EFEB;
             box-shadow: 0 8px 24px rgba(172,217,230,0.4);
         }
         
